@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { ProductManagerDB } from '../dao/productManagerDB.js';
 import { CartManagerDB } from '../dao/cartManagerDB.js';
 import { MessagesManagerDB } from '../dao/messagesManagerDB.js';
-import { auth } from '../middlewares/auth.js';
-import { publicRoute } from '../middlewares/auth.js';
+//import { auth } from '../middlewares/auth.js';
+//import { publicRoute } from '../middlewares/auth.js';
 
 const Manager = new ProductManagerDB();
 const CartManager = new CartManagerDB();
@@ -13,7 +13,7 @@ const Messages = new MessagesManagerDB();
 const router = Router();
 
 //Ruta Home y Products
-router.get('/', auth, (req, res) => {
+router.get('/', (req, res) => {
     res.redirect('/products');
 });
 
@@ -45,7 +45,7 @@ router.get("/products", async (req, res) => {
                 hasNextPage: result.hasNextPage,
                 prevLink: result.prevLink,
                 nextLink: result.nextLink,
-                user: req.session.user
+                //user: req.session.user
             });
     } catch (error) {
         console.error(error.message);
@@ -65,7 +65,7 @@ router.get("/products/:pid", async (req, res) => {
 });
 
 //Ruta Realtimeproduct
-router.get("/realTimeProducts", auth, async (req, res) => {
+router.get("/realTimeProducts", async (req, res) => {
     const queryParams = {
         page: req.query.page,
         limit: req.query.limit,
@@ -92,7 +92,7 @@ router.get("/realTimeProducts", auth, async (req, res) => {
 });
 
 //Ruta Chat
-router.get("/chat",auth, async (req, res) => {
+router.get("/chat", async (req, res) => {
     const allMessage = await Messages.getAllMessages();
 
     res.render(
@@ -105,7 +105,7 @@ router.get("/chat",auth, async (req, res) => {
 });
 
 //Rutar Cart
-router.get("/carts/:cid",auth, async (req, res) => {
+router.get("/carts/:cid", async (req, res) => {
     try {
         const cart = await CartManager.getProductsFromCartByID(req.params.cid);
         //console.log(cart);
@@ -124,33 +124,33 @@ router.get("/carts/:cid",auth, async (req, res) => {
 
 
 //Ruta Login Register Logout
-router.get("/login", publicRoute, (req, res) => {
+router.get("/login", (req, res) => {
     res.render(
         'login',
         {
             title: "Coder Login",
             style: 'index.css',
-            failLogin: req.session.failLogin ?? false 
+           // failLogin: req.session.failLogin ?? false 
         });
 });
 
-router.get("/register", publicRoute, (req, res) => {
+router.get("/register", (req, res) => {
     res.render(
         'register',
         {
             title: 'Coder Register',
             style: 'index.css',
-            failRegister: req.session.failRegister ?? false
+            //failRegister: req.session.failRegister ?? false
         });
 });
 
-router.get('/profile', auth, (req, res) => {
+router.get('/profile',  (req, res) => {
     res.render(
         'profile',
         {
             title: 'Coder Perfil',
             style: 'index.css',
-            user: req.session.user  
+            //user: req.session.user  
         });
 });
 

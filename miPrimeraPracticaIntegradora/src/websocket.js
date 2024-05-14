@@ -1,6 +1,6 @@
 //import ProductManager from "./dao/productManager.js"
 //const Manager = new ProductManager("./src/producto.json");
-import { ProductManagerDB } from "../dao/productManagerDB.js";
+import { ProductManagerDB } from './dao/productManagerDB.js'
 import { MessagesManagerDB } from "./dao/messagesManagerDB.js";
 const Manager = new ProductManagerDB();
 const Message = new MessagesManagerDB();

@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import userModel from "./models/userModel.js";
 import { isValidPassword } from "../utils/cryptoUtil.js";
 
@@ -22,14 +24,14 @@ class userManagerDB {
     }
 
     async register(user) {
-        const { first_name, lastName, email, age, password, role } = user;
+        const { first_name, last_name, email, age, password, username, role } = user;
 
-        if (!first_name || !lastName || !email || !age || !password) {
+        if (!first_name || !last_name || !email || !age || !password) {
             throw new Error('Error al registrar usuario');
         }
 
         try {
-            await userModel.create({ first_name, lastName, email, age, password });
+            await userModel.create({ first_name, last_name, email, age, password, username });
 
             return 'Usuario registrado Correctamente'
         } catch (error) {
@@ -44,12 +46,13 @@ class userManagerDB {
             throw new Error(errorMessage);
         }
         try {
-            const user = await userModel.findOne({ email });
+            const user = await userModel.findOne({ email }).lean();
 
             if (!user) throw new Error(errorMessage)
 
             if (isValidPassword(user, password)) {
-                return user;
+                delete user.password;
+                return jwt.sign(user, 'coderSecret', {expiresIn: '1h'});
             }
             throw new Error(errorMessage);
         } catch (error) {

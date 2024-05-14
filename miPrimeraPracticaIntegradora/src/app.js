@@ -1,9 +1,9 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import rutasProduct from "./router/rutasProduct.js";
-import rutasCart from "./router/rutasCart.js";
-import rutasMessage from "./router/rutasMessage.js"
-import viewsRouter from './router/viewsRouter.js'
+import rutasProduct from "./routes/rutasProduct.js";
+import rutasCart from "./routes/rutasCart.js";
+import rutasMessage from "./routes/rutasMessage.js"
+import viewsRouter from './routes/viewsRouter.js'
 import __dirname from "./utils/constantsUtil.js"
 import { Server } from 'socket.io';
 import websocket from './websocket.js'
@@ -31,7 +31,9 @@ app.set("views", `${__dirname}/../views`);
 //Routers
 app.use("/api/products", rutasProduct);
 app.use("/api/cart", rutasCart);
-app.use("/products", viewsRouter);
+
+
+app.use("/", viewsRouter);
 app.use("/chat", rutasMessage)
 
 

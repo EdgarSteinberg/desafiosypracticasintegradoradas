@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
         minLength: 3,
         require: true
     },
+    username: {
+        type: String,
+        unique: true // Asegura que cada username sea único
+    },
     cart: {
         type: [
             {
@@ -48,7 +52,7 @@ const userSchema = mongoose.Schema({
     }
 })
 
-userSchema.pre('create', function (){
+userSchema.pre('save', function (){
     this.password = createHash(this.password);
 });
 
